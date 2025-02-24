@@ -251,8 +251,12 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
         future_periods.append(f"{last_year}-{last_semester}")
 
     # Extract forecasted values from the SARIMAXResultsWrapper object
-    total_forecast_values = total_forecast.get_forecast(steps=periods).predicted_mean.round().astype(int)
-    total_forecast_values = total_forecast_values.reset_index(drop=True)  # Reset the index
+    total_forecast_values = (
+        total_forecast.get_forecast(steps=periods).predicted_mean.round().astype(int)
+    )
+    total_forecast_values = total_forecast_values.reset_index(
+        drop=True
+    )  # Reset the index
 
     # Create a dictionary to store forecasts
     all_predictions = {
@@ -265,7 +269,9 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
     # Forecast for each area using proportions
     for i in range(periods):
         for column in area_columns:
-            area_forecast = (total_forecast_values[i] * proportions[column]).round().astype(int)
+            area_forecast = (
+                (total_forecast_values[i] * proportions[column]).round().astype(int)
+            )
             all_predictions[column].append(area_forecast)
 
     # Convert dictionary to DataFrame
@@ -721,7 +727,9 @@ def forecast_modalidad(
     )  # Return the processed data, predictions DataFrame, and future periods
 
 
-def forecast_nacionalidad(filepath, total_forecast, output_dir, output_filename, periods=10):
+def forecast_nacionalidad(
+    filepath, total_forecast, output_dir, output_filename, periods=10
+):
     # Load and preprocess the data
     raw_data = load_data(filepath)
     processed_data = preprocess_data(raw_data)
@@ -819,9 +827,7 @@ def forecast_estrato(filepath, total_forecast, output_dir, output_filename, peri
 
     # Forecast for each category using proportions
     for column in existing_columns:
-        category_forecast = (
-            (total_forecast * proportions[column]).round().astype(int)
-        )
+        category_forecast = (total_forecast * proportions[column]).round().astype(int)
         all_predictions[column] = category_forecast
 
     # Convert dictionary to DataFrame
@@ -1025,22 +1031,85 @@ def main():
     # Define the output directory for plots
     output_dir = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/predictions"
 
+    # Menu options
+    menu_options = [
+        ("Area", area_data, area_predictions, area_future_periods, area_output_dir),
+        (
+            "Estadisticas Matriculados",
+            estadisticas_data,
+            estadisticas_predictions,
+            estadisticas_future_periods,
+            estadisticas_output_dir,
+        ),
+        (
+            "Estadisticas Admitidos",
+            estadisticas_admitidos_data,
+            estadisticas_admitidos_predictions,
+            estadisticas_admitidos_future_periods,
+            estadisticas_admitidos_output_dir,
+        ),
+        (
+            "Estadisticas Aspirantes",
+            estadisticas_aspirantes_data,
+            estadisticas_aspirantes_predictions,
+            estadisticas_aspirantes_future_periods,
+            estadisticas_aspirantes_output_dir,
+        ),
+        (
+            "Lugar Nacimiento",
+            lugar_nacimiento_data,
+            lugar_nacimiento_predictions,
+            lugar_nacimiento_future_periods,
+            lugar_nacimiento_output_dir,
+        ),
+        (
+            "Lugar Procedencia",
+            lugar_procedencia_data,
+            lugar_procedencia_predictions,
+            lugar_procedencia_future_periods,
+            lugar_procedencia_output_dir,
+        ),
+        (
+            "Matriculados Primera Vez",
+            matriculados_data,
+            matriculados_predictions,
+            matriculados_future_periods,
+            matriculados_output_dir,
+        ),
+        (
+            "Modalidad",
+            modalidad_data,
+            modalidad_predictions,
+            modalidad_future_periods,
+            modalidad_output_dir,
+        ),
+        (
+            "Nacionalidad",
+            nacionalidad_data,
+            nacionalidad_predictions,
+            nacionalidad_future_periods,
+            nacionalidad_output_dir,
+        ),
+        ("Sede", sede_data, sede_predictions, sede_future_periods, sede_output_dir),
+        ("Sexo", sexo_data, sexo_predictions, sexo_future_periods, sexo_output_dir),
+        (
+            "Estrato",
+            estrato_data,
+            estrato_predictions,
+            estrato_future_periods,
+            estrato_output_dir,
+        ),
+    ]
+
+    # Sort menu options alphabetically by name
+    menu_options.sort(key=lambda x: x[0])
+
     # Menu for user to choose which plot to see
     while True:
         os.system("cls")
         print("\nSelect the dataset to plot the forecast:")
-        print("1. Area")
-        print("2. Estadisticas Matriculados")
-        print("3. Estadisticas Admitidos")
-        print("4. Estadisticas Aspirantes")
-        print("5. Lugar Nacimiento")
-        print("6. Lugar Procedencia")
-        print("7. Matriculados Primera Vez")
-        print("8. Modalidad")
-        print("9. Nacionalidad")
-        print("10. Sede")
-        print("11. Sexo")
-        print("12. Estrato")
+        for i, (name, _, _, _, _) in enumerate(menu_options, 1):
+            print(f"{i}. {name}")
         print("0. Exit")
 
         dataset_choice = int(input("Enter the number of your choice: "))
@@ -1048,164 +1117,106 @@ def main():
         if dataset_choice == 0:
             print("Exiting the program.")
             break
-        elif dataset_choice == 1:
-            columns_to_forecast = [
-                "Administración de empresas y derecho",
-                "Agricultura, silvicultura, pesca y veterinaria",
-                "Artes y humanidades",
-                "Ciencias naturales, matemáticas y estadística",
-                "Ciencias sociales, periodismo e información",
-                "Educación",
-                "Ingeniería, industria y construcción",
-                "Salud y bienestar",
-                "Sin información",
-                "Tecnologías de la información y la comunicación (TIC)",
-            ]
-            processed_data = area_data
-            all_predictions = area_predictions
-            future_periods = area_future_periods
-            output_dir = area_output_dir
-        elif dataset_choice == 2:
-            columns_to_forecast = [
-                "Postgrado",
-                "Pregrado",
-            ]
-            processed_data = estadisticas_data
-            all_predictions = estadisticas_predictions
-            future_periods = estadisticas_future_periods
-            output_dir = estadisticas_output_dir
-        elif dataset_choice == 3:
-            columns_to_forecast = [
-                "Postgrado",
-                "Pregrado",
-            ]
-            processed_data = estadisticas_admitidos_data
-            all_predictions = estadisticas_admitidos_predictions
-            future_periods = estadisticas_admitidos_future_periods
-            output_dir = estadisticas_admitidos_output_dir
-        elif dataset_choice == 4:
-            columns_to_forecast = [
-                "Postgrado",
-                "Pregrado",
-            ]
-            processed_data = estadisticas_aspirantes_data
-            all_predictions = estadisticas_aspirantes_predictions
-            future_periods = estadisticas_aspirantes_future_periods
-            output_dir = estadisticas_aspirantes_output_dir
-        elif dataset_choice == 5:
-            columns_to_forecast = lugar_nacimiento_data[
-                "Departamento"
-            ].unique()
-            processed_data = lugar_nacimiento_data
-            all_predictions = lugar_nacimiento_predictions
-            future_periods = lugar_nacimiento_future_periods
-            output_dir = lugar_nacimiento_output_dir
-        elif dataset_choice == 6:
-            columns_to_forecast = lugar_procedencia_data[
-                "Departamento"
-            ].unique()
-            processed_data = lugar_procedencia_data
-            all_predictions = lugar_procedencia_predictions
-            future_periods = lugar_procedencia_future_periods
-            output_dir = lugar_procedencia_output_dir
-        elif dataset_choice == 7:
-            columns_to_forecast = matriculados_columns
-            processed_data = matriculados_data
-            all_predictions = matriculados_predictions
-            future_periods = matriculados_future_periods
-            output_dir = matriculados_output_dir
-        elif dataset_choice == 8:
-            columns_to_forecast = [
-                "Doctorado",
-                "Especialidades médicas",
-                "Especialización",
-                "Maestría",
-                "Pregrado",
-            ]
-            processed_data = modalidad_data
-            all_predictions = modalidad_predictions
-            future_periods = modalidad_future_periods
-            output_dir = modalidad_output_dir
-        elif dataset_choice == 9:
-            columns_to_forecast = [
-                "Colombiana",
-                "Extranjero",
-                "Sin información",
-            ]
-            processed_data = nacionalidad_data
-            all_predictions = nacionalidad_predictions
-            future_periods = nacionalidad_future_periods
-            output_dir = nacionalidad_output_dir
-        elif dataset_choice == 10:
-            columns_to_forecast = [
-                "Amazonía",
-                "Bogotá",
-                "Caribe",
-                "La Paz",
-                "Manizales",
-                "Medellín",
-                "Orinoquía",
-                "Palmira",
-                "Tumaco",
-            ]
-            processed_data = sede_data
-            all_predictions = sede_predictions
-            future_periods = sede_future_periods
-            output_dir = sede_output_dir
-        elif dataset_choice == 11:
-            columns_to_forecast = ["Hombres", "Mujeres"]
-            processed_data = sexo_data
-            all_predictions = sexo_predictions
-            future_periods = sexo_future_periods
-            output_dir = sexo_output_dir
-        elif dataset_choice == 12:
-            columns_to_forecast = [
-                "Estrato 1",
-                "Estrato 2",
-                "Estrato 3",
-                "Estrato 4",
-                "Estrato 5",
-                "Estrato 6",
-                "ND/NE",
-            ]
-            processed_data = estrato_data
-            all_predictions = estrato_predictions
-            future_periods = estrato_future_periods
-            output_dir = estrato_output_dir
-        else:
-            print("Invalid choice. Please try again.")
-            continue
+        elif 1 <= dataset_choice <= len(menu_options):
+            selected_option = menu_options[dataset_choice - 1]
+            name, processed_data, all_predictions, future_periods, output_dir = (
+                selected_option
+            )
 
-        while True:
-            print("\nSelect the column to plot the forecast:")
-            for i, column in enumerate(columns_to_forecast, 1):
-                print(f"{i}. {column}")
-            print(f"{len(columns_to_forecast) + 1}. Total")
-            print("0. Back to dataset selection")
+            if name == "Area":
+                columns_to_forecast = [
+                    "Administración de empresas y derecho",
+                    "Agricultura, silvicultura, pesca y veterinaria",
+                    "Artes y humanidades",
+                    "Ciencias naturales, matemáticas y estadística",
+                    "Ciencias sociales, periodismo e información",
+                    "Educación",
+                    "Ingeniería, industria y construcción",
+                    "Salud y bienestar",
+                    "Sin información",
+                    "Tecnologías de la información y la comunicación (TIC)",
+                ]
+            elif (
+                name == "Estadisticas Matriculados"
+                or name == "Estadisticas Admitidos"
+                or name == "Estadisticas Aspirantes"
+            ):
+                columns_to_forecast = ["Postgrado", "Pregrado"]
+            elif name == "Lugar Nacimiento" or name == "Lugar Procedencia":
+                columns_to_forecast = processed_data["Departamento"].unique()
+            elif name == "Matriculados Primera Vez":
+                columns_to_forecast = matriculados_columns
+            elif name == "Modalidad":
+                columns_to_forecast = [
+                    "Doctorado",
+                    "Especialidades médicas",
+                    "Especialización",
+                    "Maestría",
+                    "Pregrado",
+                ]
+            elif name == "Nacionalidad":
+                columns_to_forecast = ["Colombiana", "Extranjero", "Sin información"]
+            elif name == "Sede":
+                columns_to_forecast = [
+                    "Amazonía",
+                    "Bogotá",
+                    "Caribe",
+                    "La Paz",
+                    "Manizales",
+                    "Medellín",
+                    "Orinoquía",
+                    "Palmira",
+                    "Tumaco",
+                ]
+            elif name == "Sexo":
+                columns_to_forecast = ["Hombres", "Mujeres"]
+            elif name == "Estrato":
+                columns_to_forecast = [
+                    "Estrato 1",
+                    "Estrato 2",
+                    "Estrato 3",
+                    "Estrato 4",
+                    "Estrato 5",
+                    "Estrato 6",
+                    "ND/NE",
+                ]
 
-            column_choice = int(input("Enter the number of your choice: "))
+            while True:
+                print("\nSelect the column to plot the forecast:")
+                for i, column in enumerate(columns_to_forecast, 1):
+                    print(f"{i}. {column}")
+                print(f"{len(columns_to_forecast) + 1}. Total")
+                print("0. Back to dataset selection")
 
-            if column_choice == 0:
-                break
-            elif 1 <= column_choice <= len(columns_to_forecast):
-                selected_column = columns_to_forecast[column_choice - 1]
-                plot_forecast(
-                    processed_data,
-                    all_predictions[selected_column],
-                    future_periods,
-                    selected_column.replace("/", "_"),  # Replace "/" with "_" in column name
-                    output_dir,
-                )
-            elif column_choice == len(columns_to_forecast) + 1:
-                plot_forecast(
-                    processed_data,
-                    all_predictions["Total"],
-                    future_periods,
-                    "Total",
-                    output_dir,
-                )
-            else:
-                print("Invalid choice. Please try again.")
+                column_choice = int(input("Enter the number of your choice: "))
+
+                if column_choice == 0:
+                    break
+                elif 1 <= column_choice <= len(columns_to_forecast):
+                    selected_column = columns_to_forecast[column_choice - 1]
+                    try:
+                        print(f"Plotting forecast for column: {selected_column}")
+                        print(f"Processed data columns: {processed_data.columns}")
+                        print(f"All predictions keys: {all_predictions.keys()}")
+                        plot_forecast(
+                            processed_data,
+                            all_predictions[selected_column],
+                            future_periods,
+                            selected_column.replace("/", "_"),  # Replace "/" with "_" in column name
+                            output_dir,
+                        )
+                    except KeyError:
+                        print(f"An error occurred while plotting the forecast: '{selected_column}' not found.")
+                elif column_choice == len(columns_to_forecast) + 1:
+                    plot_forecast(
+                        processed_data,
+                        all_predictions["Total"],
+                        future_periods,
+                        "Total",
+                        output_dir,
+                    )
+                else:
+                    print("Invalid choice. Please try again.")
 
 
 if __name__ == "__main__":
