@@ -846,20 +846,20 @@ def forecast_estrato(filepath, total_forecast, output_dir, output_filename, peri
 
 def main():
     # Base output directory
-    base_output_dir = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/predictions"
+    base_output_dir = "data/predictions"
 
     # File paths and columns to forecast
-    matriculados_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Matriculados Primera Vez.csv"
-    sexo_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Sexo.csv"
-    sede_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Sede.csv"
-    area_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Area del Conocimiento.csv"
-    estadisticas_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Estadisticas Matriculados.csv"
-    estadisticas_admitidos_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Estadisticas Admitidos.csv"
-    lugar_nacimiento_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Lugar Nacimiento.csv"
-    lugar_procedencia_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Lugar Procedencia.csv"
-    modalidad_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Modalidad.csv"
-    nacionalidad_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Nacionalidad.csv"
-    estrato_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Estrato.csv"
+    matriculados_filepath = "data/csv/Matriculados Primera Vez.csv"
+    sexo_filepath = "data/csv/Sexo.csv"
+    sede_filepath = "data/csv/Sede.csv"
+    area_filepath = "data/csv/Area del Conocimiento.csv"
+    estadisticas_filepath = "data/csv/Estadisticas Matriculados.csv"
+    estadisticas_admitidos_filepath = "data/csv/Estadisticas Admitidos.csv"
+    lugar_nacimiento_filepath = "data/csv/Lugar Nacimiento.csv"
+    lugar_procedencia_filepath = "data/csv/Lugar Procedencia.csv"
+    modalidad_filepath = "data/csv/Modalidad.csv"
+    nacionalidad_filepath = "data/csv/Nacionalidad.csv"
+    estrato_filepath = "data/csv/Estrato.csv"
     matriculados_columns = [
         "No",
         "Sí",
@@ -941,7 +941,7 @@ def main():
     )
 
     # File path for "Estadisticas Aspirantes" dataset
-    estadisticas_aspirantes_filepath = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/csv/Estadisticas Aspirantes.csv"
+    estadisticas_aspirantes_filepath = "data/csv/Estadisticas Aspirantes.csv"
 
     # Forecast and save for the "Estadisticas Aspirantes" dataset
     estadisticas_aspirantes_output_dir = os.path.join(
@@ -1029,7 +1029,7 @@ def main():
     )
 
     # Define the output directory for plots
-    output_dir = "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 3/UNForecasting/data/predictions"
+    output_dir = "data/predictions"
 
     # Menu options
     menu_options = [
