@@ -1034,71 +1034,17 @@ def main():
     # Menu options
     menu_options = [
         ("Area", area_data, area_predictions, area_future_periods, area_output_dir),
-        (
-            "Estadisticas Matriculados",
-            estadisticas_data,
-            estadisticas_predictions,
-            estadisticas_future_periods,
-            estadisticas_output_dir,
-        ),
-        (
-            "Estadisticas Admitidos",
-            estadisticas_admitidos_data,
-            estadisticas_admitidos_predictions,
-            estadisticas_admitidos_future_periods,
-            estadisticas_admitidos_output_dir,
-        ),
-        (
-            "Estadisticas Aspirantes",
-            estadisticas_aspirantes_data,
-            estadisticas_aspirantes_predictions,
-            estadisticas_aspirantes_future_periods,
-            estadisticas_aspirantes_output_dir,
-        ),
-        (
-            "Lugar Nacimiento",
-            lugar_nacimiento_data,
-            lugar_nacimiento_predictions,
-            lugar_nacimiento_future_periods,
-            lugar_nacimiento_output_dir,
-        ),
-        (
-            "Lugar Procedencia",
-            lugar_procedencia_data,
-            lugar_procedencia_predictions,
-            lugar_procedencia_future_periods,
-            lugar_procedencia_output_dir,
-        ),
-        (
-            "Matriculados Primera Vez",
-            matriculados_data,
-            matriculados_predictions,
-            matriculados_future_periods,
-            matriculados_output_dir,
-        ),
-        (
-            "Modalidad",
-            modalidad_data,
-            modalidad_predictions,
-            modalidad_future_periods,
-            modalidad_output_dir,
-        ),
-        (
-            "Nacionalidad",
-            nacionalidad_data,
-            nacionalidad_predictions,
-            nacionalidad_future_periods,
-            nacionalidad_output_dir,
-        ),
+        ("Estadisticas Matriculados", estadisticas_data, estadisticas_predictions, estadisticas_future_periods, estadisticas_output_dir),
+        ("Estadisticas Admitidos", estadisticas_admitidos_data, estadisticas_admitidos_predictions, estadisticas_admitidos_future_periods, estadisticas_admitidos_output_dir),
+        ("Estadisticas Aspirantes", estadisticas_aspirantes_data, estadisticas_aspirantes_predictions, estadisticas_aspirantes_future_periods, estadisticas_aspirantes_output_dir),
+        ("Lugar Nacimiento", lugar_nacimiento_data, lugar_nacimiento_predictions, lugar_nacimiento_future_periods, lugar_nacimiento_output_dir),
+        ("Lugar Procedencia", lugar_procedencia_data, lugar_procedencia_predictions, lugar_procedencia_future_periods, lugar_procedencia_output_dir),
+        ("Matriculados Primera Vez", matriculados_data, matriculados_predictions, matriculados_future_periods, matriculados_output_dir),
+        ("Modalidad", modalidad_data, modalidad_predictions, modalidad_future_periods, modalidad_output_dir),
+        ("Nacionalidad", nacionalidad_data, nacionalidad_predictions, nacionalidad_future_periods, nacionalidad_output_dir),
         ("Sede", sede_data, sede_predictions, sede_future_periods, sede_output_dir),
         ("Sexo", sexo_data, sexo_predictions, sexo_future_periods, sexo_output_dir),
-        (
-            "Estrato",
-            estrato_data,
-            estrato_predictions,
-            estrato_future_periods,
-            estrato_output_dir,
-        ),
+        ("Estrato", estrato_data, estrato_predictions, estrato_future_periods, estrato_output_dir),
     ]
 
     # Sort menu options alphabetically by name
@@ -1119,9 +1065,7 @@ def main():
             break
         elif 1 <= dataset_choice <= len(menu_options):
             selected_option = menu_options[dataset_choice - 1]
-            name, processed_data, all_predictions, future_periods, output_dir = (
-                selected_option
-            )
+            name, processed_data, all_predictions, future_periods, output_dir = selected_option
 
             if name == "Area":
                 columns_to_forecast = [
@@ -1136,11 +1080,7 @@ def main():
                     "Sin información",
                     "Tecnologías de la información y la comunicación (TIC)",
                 ]
-            elif (
-                name == "Estadisticas Matriculados"
-                or name == "Estadisticas Admitidos"
-                or name == "Estadisticas Aspirantes"
-            ):
+            elif name == "Estadisticas Matriculados" or name == "Estadisticas Admitidos" or name == "Estadisticas Aspirantes":
                 columns_to_forecast = ["Postgrado", "Pregrado"]
             elif name == "Lugar Nacimiento" or name == "Lugar Procedencia":
                 columns_to_forecast = processed_data["Departamento"].unique()
@@ -1198,6 +1138,10 @@ def main():
                         print(f"Plotting forecast for column: {selected_column}")
                         print(f"Processed data columns: {processed_data.columns}")
                         print(f"All predictions keys: {all_predictions.keys()}")
+                        if selected_column not in all_predictions:
+                            print(f"Column '{selected_column}' not found in predictions.")
+                        else:
+                            print(f"Forecast data for '{selected_column}': {all_predictions[selected_column]}")
                         plot_forecast(
                             processed_data,
                             all_predictions[selected_column],

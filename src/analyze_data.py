@@ -11,9 +11,7 @@ from statsmodels.graphics.tsaplots import (
 )  # Import plot_acf and plot_pacf for ACF and PACF plots
 
 # Load Data
-df = pd.read_csv(
-    "d:/Archivos_Nicolás/UN/MateriasUN/2024-2/Modelos y Simulación/Proyecto_Modelos/Entrega 2/UNForecasting/data/csv/Matriculados Primera Vez.csv"
-)  # Load the dataset
+df = pd.read_csv("data/csv/Matriculados Primera Vez.csv")  # Load the dataset
 
 # Sort the data by 'Año' and 'Semestre'
 df = df.sort_values(by=["Año", "Semestre"])  # Sort the dataframe by year and semester
