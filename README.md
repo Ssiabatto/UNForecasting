@@ -1,57 +1,72 @@
 # UNForecasting
 
-This project aims to forecast student enrollment data for various categories such as area of study, campus, nationality, and more using time series forecasting models. The forecasts are visualized using interactive plots.
+This project aims to forecast student enrollment data for various categories such as area of study, campus, nationality,
+and more using time series forecasting models. The forecasts are visualized using interactive plots.
 
 ## Project Structure
 
 ```
 data
-├── csv
-│   ├── Area del Conocimiente.csv       # Contains the knowledge area distribution of the enrolled students
-│   ├── Estadisticas Admitidos.csv      # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
-│   ├── Estadisticas Aspirantes.csv     # Contains the amount of applicants, separated by "Pregrado" and "Postgrado"
-│   ├── Estadisticas Matriculados.csv   # Contains the amount of students enrolled on a "Pregrado" and "Postgrado"
-│   ├── Estrato.csv                     # Contains the stats about the economic condition of the enrolled students
-│   ├── Lugar Nacimiento.csv            # Contains the stats about the birthplaces of the students
-│   ├── Lugar Procedencia.csv           # Contains the stats about the locations from where the students come.
-│   ├── Matriculados Primera Vez.csv    # Contains the amount of students who enrolled for the first semester and the "old" students
-│   ├── Modalidad.csv                   # Contains the info regarding the type of enrollment of the students
-│   ├── Nacionalidad.csv                # Contains the stats regarding the country of birth of the students
-│   ├── Sede.csv                        # Contains the stats of enrollment on each headquarters
-│   └── Sexo.csv                        # Contains the info about the number of Men and Women enrolled
-├── excels
-│   ├── Area del Conocimiente.xlsx      # Contains the knowledge area distribution of the enrolled students
-│   ├── Estadisticas Admitidos.xlsx     # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
-│   ├── Estadisticas Aspirantes.xlsx    # Contains the amount of applicants, separated by "Pregrado" and "Postgrado"
-│   ├── Estadisticas Matriculados.xlsx  # Contains the amount of students enrolled on a "Pregrado" and "Postgrado"
-│   ├── Estrato.xlsx                    # Contains the stats about the economic condition of the enrolled students
-│   ├── Lugar Nacimiento.xlsx           # Contains the stats about the birthplaces of the students
-│   ├── Lugar Procedencia.xlsx          # Contains the stats about the locations from where the students come.
-│   ├── Matriculados Primera Vez.xlsx   # Contains the amount of students who enrolled for the first semester and the "old" students
-│   ├── Modalidad.xlsx                  # Contains the info regarding the type of enrollment of the students
-│   ├── Nacionalidad.xlsx               # Contains the stats regarding the country of birth of the students
-│   ├── PorcentajesAdmitidos.xlsx       # Contains the percentage of accepted students in relation to the number of applicants
-│   ├── Sede.xlsx                       # Contains the stats of enrollment on each headquarters
-│   └── Sexo.xlsx                       # Contains the info about the number of Men and Women enrolled
-├── predictions (Basically the same as csv but these are projections, 10 semesters ahead of the last historical data on csv) (These are the current projections, these may change)
-│   ├── Area.csv                       # Contains the area distribution of the enrolled students
-│   ├── Area.csv                       # Contains the area distribution of the
-│   ├── Estadisticas Matriculados.csv  # Contains the amount of students on a "Pregrado" and "Postgrado"
-│   ├── Lugar Nacimiento.csv           # Contains the stats about the birthplaces of the students
-│   ├── Lugar Procedencia.csv          # Contains the stats about the locations from where the students come.
-│   ├── Matriculados Primera Vez.csv   # Contains the amount of students who enrolled for the first semester and the "old" students
-│   ├── Modalidad.csv                  # Contains the info regarding the type of enrollment of the students
-│   ├── Nacionalidad.csv               # Contains the stats regarding the country of birth of the students
-│   ├── Sede.csv                       # Contains the stats of enrollment on each headquarters
-│   └── Sexo.csv                       # Contains the info about the number of Men and Women enrolled
+├─csv
+│ ├─ Area del Conocimiento.csv      # Contains the knowledge area distribution of the enrolled students
+│ ├─ Estadisticas Admitidos.csv     # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
+│ ├─ Estadisticas Aspirantes.csv    # Contains the amount of applicants, separated by "Pregrado" and "Postgrado"
+│ ├─ Estadisticas Matriculados.csv  # Contains the amount of students enrolled on a "Pregrado" and "Postgrado"
+│ ├─ Estrato.csv                    # Contains the stats about the economic condition of the enrolled students
+│ ├─ Lugar Nacimiento.csv           # Contains the stats about the birthplaces of the students
+│ ├─ Lugar Procedencia.csv          # Contains the stats about the locations from where the students come.
+│ ├─ Matriculados Primera Vez.csv   # Contains the amount of students who enrolled for the first semester and the "old" students
+│ ├─ Modalidad.csv                  # Contains the info regarding the type of enrollment of the students
+│ ├─ Nacionalidad.csv               # Contains the stats regarding the country of birth of the students
+│ ├─ Sede.csv                       # Contains the stats of enrollment on each headquarters
+│ └─ Sexo.csv                       # Contains the info about the number of Men and Women enrolled
+├─excels (same as .csv but on excel)
+│ ├─ Area del Conocimiento.xlsx     # Contains the knowledge area distribution of the enrolled students
+│ ├─ Estadisticas Admitidos.xlsx    # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
+│ ├─ Estadisticas Aspirantes.xlsx   # Contains the amount of applicants, separated by "Pregrado" and "Postgrado"
+│ ├─ Estadisticas Matriculados.xlsx # Contains the amount of students enrolled on a "Pregrado" and "Postgrado"
+│ ├─ Estrato.xlsx                   # Contains the stats about the economic condition of the enrolled students
+│ ├─ Lugar Nacimiento.xlsx          # Contains the stats about the birthplaces of the students
+│ ├─ Lugar Procedencia.xlsx         # Contains the stats about the locations from where the students come.
+│ ├─ Matriculados Primera Vez.xlsx  # Contains the amount of students who enrolled for the first semester and the "old" students
+│ ├─ Modalidad.xlsx                 # Contains the info regarding the type of enrollment of the students
+│ ├─ Nacionalidad.xlsx              # Contains the stats regarding the country of birth of the students
+│ ├─ PorcentajesAdmitidos.xlsx      # Contains the percentage of accepted students in relation to the number of applicants
+│ ├─ Sede.xlsx                      # Contains the stats of enrollment on each headquarters
+│ └─ Sexo.xlsx                      # Contains the info about the number of Men and Women enrolled
+├─predictions (10 semesters ahead of the last historical data on csv, they include graphs of the projected information + historical)
+│ ├─Area                      # Contains the csv files and the projection images (regarding Area del Conocimiento), these get generated by running the script
+│ │ └─ Area_forecasts.csv                    # Contains the area distribution of the enrolled students
+│ ├─Estadisticas Admitidos    # Contains the csv files and the projection images (regarding Estadisticas Admitidos), these get generated by running the script
+│ │ └─ Estadisticas_Admitidos_forecasts.csv  # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
+│ ├─Estadisticas Aspirantes   # Contains the csv files and the projection images (regarding Estadisticas Aspirantes), these get generated by running the script
+│ │ └─ Estadisticas_Aspirantes_forecasts.csv # Contains the amount of students accepted on each period, separated by "Pregrado" and "Postgrado"
+│ ├─Estadisticas Matriculados # Contains the csv files and the projection images (regarding Estadisticas Matriculados), these get generated by running the script
+│ │ └─ Estadisticas_forecasts.csv            # Contains the amount of students on a "Pregrado" and "Postgrado"
+│ ├─Estrato                   # Contains the csv files and the projection images (regarding Estrato), these get generated by running the script
+│ │ └─ Estrato_forecasts.csv                 # Contains the stats about the economic condition of the enrolled students
+│ ├─Lugar_Nacimiento          # Contains the csv files and the projection images (regarding Lugar Nacimiento), these get generated by running the script
+│ │ └─ Lugar_Nacimiento_forecasts.csv        # Contains the stats about the birthplaces of the students
+│ ├─Lugar_Procedencia         # Contains the csv files and the projection images (regarding Lugar Procedencia), these get generated by running the script
+│ │ └─ Lugar_Procedencia_forecasts.csv        # Contains the stats about the locations from where the students come.
+│ ├─Matriculados_Primera_Vez  # Contains the csv files and the projection images (regarding Matriculados Primera Vez), these get generated by running the script
+│ │ └─ Matriculados Primera Vez.csv # Contains the amount of students who enrolled for the first semester and the "old" students
+│ ├─Modalidad                 # Contains the csv files and the projection images (regarding Modalidad), these get generated by running the script
+│ │ └─ Modalidad.csv                          # Contains the info regarding the type of enrollment of the students
+│ ├─Nacionalidad              # Contains the csv files and the projection images (regarding Nacionalidad), these get generated by running the script
+│ │ └─ Nacionalidad.csv                       # Contains the stats regarding the country of birth of the students
+│ ├─Sede                      # Contains the csv files and the projection images (regarding Nacionalidad), these get generated by running the script
+│ │ └─ Sede.csv                               # Contains the stats of enrollment on each headquarters
+│ Sexo                        # Contains the csv files and the projection images (regarding Sexo), these get generated by running the script
+│ │ └─ Sexo.csv                               # Contains the info about the number of Men and Women enrolled
 ├── src
-│   ├── analyze_data.py          # Code for analyzing the data and determining parameters for the SARIMAX model
-│   ├── data_preprocessing.py    # Code for loading and preprocessing the data
-│   ├── forecasting_model.py     # Code for training the SARIMAX model and generating forecasts
-│   ├── main.py                  # Main script that orchestrates data loading, forecasting, and visualization
-│   └── visualization.py         # Code for plotting the historical data and forecasts
-├── requirements.txt      # Lists project dependencies
-└── README.md             # Project documentation
+│ ├── analyze_data.py         # Code for analyzing the data and determining parameters for the SARIMAX model
+│ ├── data_preprocessing.py   # Code for loading and preprocessing the data
+│ ├── forecasting_model.py    # Code for training the SARIMAX model and generating forecasts
+│ ├── main.py                 # Main script that orchestrates data loading, forecasting, and visualization
+│ └── visualization.py        # Code for plotting the historical data and forecasts
+├── README.md # Project documentation
+└── requirements.txt # Lists project dependencies
 ```
 
 ## Setup Instructions
@@ -60,30 +75,31 @@ data
 
 1. Clone the repository:
 
-   ```sh
-   git clone <repository_url>
-   cd UNForecasting
-   ```
+```sh
+git clone <repository_url>
+cd UNForecasting
+```
 
 2. Create a virtual environment and activate it:
 
-   ```sh
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
+```sh
+python -m venv venv
+source venv/bin/activate # On Windows use `venv\Scripts\activate`
+```
 
 3. Install the required packages:
-   ```sh
-   pip install -r requirements.txt
-   ```
+
+```sh
+pip install -r requirements.txt
+```
 
 ## Usage
 
 1. Run the main script:
 
-   ```sh
-   python src/main.py
-   ```
+```sh
+python src/main.py
+```
 
 2. Follow the on-screen instructions to select the dataset and column for which you want to see the forecast.
 
