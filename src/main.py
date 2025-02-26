@@ -17,10 +17,16 @@ def forecast_and_save(
     order,
     seasonal_order,
     periods=10,
+    exclude_last_year=False,
 ):
     # Load and preprocess the data
     raw_data = load_data(filepath)
     processed_data = preprocess_data(raw_data)
+
+    if exclude_last_year:
+        # Exclude the last year of data
+        last_year = processed_data["Period"].str.split("-").str[0].astype(int).max()
+        processed_data = processed_data[processed_data["Period"].str.split("-").str[0].astype(int) < last_year]
 
     # Train the model
     model = train_model(processed_data, "Total", order, seasonal_order)
@@ -65,6 +71,31 @@ def forecast_and_save(
     print(f"All forecasts saved to {output_filepath}")
 
     return processed_data, all_predictions, future_periods
+
+
+def compare_forecasts(actual_data, forecasted_data, columns_to_compare):
+    # Convert forecasted_data dictionary to DataFrame
+    forecasted_df = pd.DataFrame(forecasted_data)
+    
+    # Ensure the forecasted data has the same period as the actual data for comparison
+    forecasted_df["Period"] = actual_data["Period"].iloc[-len(forecasted_df):].values
+    comparison = actual_data[["Period"] + columns_to_compare + ["Total"]].copy()
+    comparison = comparison.merge(forecasted_df, on="Period", suffixes=("", "_Forecasted"))
+    
+    # Extract the values for the period 2024-1
+    historical_value = comparison.loc[comparison["Period"] == "2024-1", columns_to_compare + ["Total"]].values[0]
+    forecasted_value = comparison.loc[comparison["Period"] == "2024-1", [f"{col}_Forecasted" for col in columns_to_compare + ["Total"]]].values[0]
+    
+    # Calculate the difference and error percentage
+    difference = forecasted_value - historical_value
+    error_percentage = (difference / historical_value) * 100
+    
+    # Create the comparison text
+    comparison_text = f"Comparison for Period 2024-1:\n"
+    for i, column in enumerate(columns_to_compare + ["Total"]):
+        comparison_text += f"{column} - Historical: {historical_value[i]}, Forecasted: {forecasted_value[i]}, Difference: {difference[i]}, Error Percentage: {error_percentage[i]:.2f}%\n"
+    
+    return comparison_text
 
 
 def forecast_sexo(filepath, total_forecast, output_dir, output_filename, periods=10):
@@ -866,6 +897,28 @@ def main():
     )
 
     total_forecast = matriculados_predictions["Total"]
+
+    # Forecast and save for the "Matriculados Primera Vez" dataset excluding the last year
+    matriculados_exclude_last_year_output_dir = os.path.join(base_output_dir, "ComparisonFiles")
+    matriculados_exclude_last_year_data, matriculados_exclude_last_year_predictions, matriculados_exclude_last_year_future_periods = (
+        forecast_and_save(
+            matriculados_filepath,
+            matriculados_columns,
+            matriculados_exclude_last_year_output_dir,
+            "TotalWithoutLast.csv",
+            order,
+            seasonal_order,
+            periods,
+            exclude_last_year=True,
+        )
+    )
+
+    # Compare actual and forecasted values
+    comparison_text = compare_forecasts(matriculados_data, matriculados_exclude_last_year_predictions, matriculados_columns)
+    comparison_output_filepath = os.path.join(matriculados_exclude_last_year_output_dir, "Comparison.txt")
+    with open(comparison_output_filepath, "w") as file:
+        file.write(comparison_text)
+    print(f"Comparison saved to {comparison_output_filepath}")
 
     # Forecast and save for the "Area" dataset using the trained model
     area_output_dir = os.path.join(base_output_dir, "Area")

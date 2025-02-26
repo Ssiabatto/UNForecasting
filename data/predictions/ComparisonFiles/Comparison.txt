@@ -1,0 +1,4 @@
+Comparison for Period 2024-1:
+No - Historical: 49407, Forecasted: 49229, Difference: -178, Error Percentage: -0.36%
+Sí - Historical: 7176, Forecasted: 7460, Difference: 284, Error Percentage: 3.96%
+Total - Historical: 56583, Forecasted: 56689, Difference: 106, Error Percentage: 0.19%
