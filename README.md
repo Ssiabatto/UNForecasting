@@ -76,7 +76,7 @@ data
 1. Clone the repository:
 
 ```sh
-git clone <repository_url>
+git clone <https://github.com/Ssiabatto/UNForecasting.git>
 cd UNForecasting
 ```
 
