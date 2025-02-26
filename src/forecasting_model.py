@@ -4,7 +4,7 @@ from statsmodels.tsa.statespace.sarimax import (
 )  # Import SARIMAX for time series forecasting
 
 
-def train_model(df, column, order=(1, 1, 1), seasonal_order=(1, 1, 1, 2)):
+def train_model(df, column, order=(2, 1, 2), seasonal_order=(1, 1, 1, 2)):
     # Initialize the SARIMAX model with the specified order and seasonal order
     model = SARIMAX(
         df[column],

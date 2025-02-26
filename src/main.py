@@ -221,7 +221,6 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
     raw_data = load_data(filepath)
     processed_data = preprocess_data(raw_data)
 
-    # Calculate proportions
     area_columns = [
         "Administración de empresas y derecho",
         "Agricultura, silvicultura, pesca y veterinaria",
@@ -234,6 +233,9 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
         "Sin información",
         "Tecnologías de la información y la comunicación (TIC)",
     ]
+    # Ensure all columns exist in the dataset
+    existing_columns = [col for col in area_columns if col in processed_data.columns]
+    # Calculate proportions
     proportions = (
         processed_data[area_columns].div(processed_data["Total"], axis=0).mean()
     )
@@ -250,29 +252,15 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
             last_year += 1
         future_periods.append(f"{last_year}-{last_semester}")
 
-    # Extract forecasted values from the SARIMAXResultsWrapper object
-    total_forecast_values = (
-        total_forecast.get_forecast(steps=periods).predicted_mean.round().astype(int)
-    )
-    total_forecast_values = total_forecast_values.reset_index(
-        drop=True
-    )  # Reset the index
-
     # Create a dictionary to store forecasts
     all_predictions = {
         "Period": future_periods,
-        "Total": total_forecast_values,
+        "Total": total_forecast.round().astype(int),
     }
-    for column in area_columns:
-        all_predictions[column] = []
 
-    # Forecast for each area using proportions
-    for i in range(periods):
-        for column in area_columns:
-            area_forecast = (
-                (total_forecast_values[i] * proportions[column]).round().astype(int)
-            )
-            all_predictions[column].append(area_forecast)
+    for column in existing_columns:
+        category_forecast = (total_forecast * proportions[column]).round().astype(int)
+        all_predictions[column] = category_forecast
 
     # Convert dictionary to DataFrame
     predictions_df = pd.DataFrame(all_predictions)
@@ -288,16 +276,24 @@ def forecast_area(filepath, total_forecast, output_dir, output_filename, periods
     return processed_data, all_predictions, future_periods
 
 
-def forecast_estadisticas(filepath, model, output_dir, output_filename, periods=10):
+def forecast_estadisticas(
+    filepath, total_forecast, output_dir, output_filename, periods=10
+):
     # Load and preprocess the data
     raw_data = load_data(filepath)
     processed_data = preprocess_data(raw_data)
 
-    # Calculate proportions
+    estadisticas_columns = [
+        "Postgrado",
+        "Pregrado",
+    ]
+
+    # Ensure all columns exist in the dataset
+    existing_columns = [
+        col for col in estadisticas_columns if col in processed_data.columns
+    ]
     proportions = (
-        processed_data[["Postgrado", "Pregrado"]]
-        .div(processed_data["Total"], axis=0)
-        .mean()
+        processed_data[estadisticas_columns].div(processed_data["Total"], axis=0).mean()
     )
 
     # Generate future periods
@@ -315,23 +311,14 @@ def forecast_estadisticas(filepath, model, output_dir, output_filename, periods=
     # Create a dictionary to store forecasts
     all_predictions = {
         "Period": future_periods,
-        "Total": [],
+        "Total": total_forecast.round().astype(int),
     }
     for column in ["Postgrado", "Pregrado"]:
         all_predictions[column] = []
 
-    # Forecast one period at a time
-    for period in range(periods):
-        next_forecast = round(model.get_forecast(steps=1).predicted_mean.iloc[0])
-        all_predictions["Total"].append(next_forecast)
-
-        for column in ["Postgrado", "Pregrado"]:
-            category_forecast = (
-                (next_forecast * proportions[column]).round().astype(int)
-            )
-            all_predictions[column].append(category_forecast)
-
-        model = model.append([next_forecast])
+    for column in existing_columns:
+        category_forecast = (total_forecast * proportions[column]).round().astype(int)
+        all_predictions[column] = category_forecast
 
     # Convert dictionary to DataFrame
     predictions_df = pd.DataFrame(all_predictions)
@@ -394,7 +381,7 @@ def forecast_estadisticas_admitidos(
             0
         ]  # Forecast the next period
         all_predictions["Period"].append(future_periods[period])
-        all_predictions["Total"].append(next_forecast)
+        all_predictions["Total"].append(next_forecast.round().astype(int))
 
         # Forecast for each category using proportions
         for column in ["Postgrado", "Pregrado"]:
@@ -435,17 +422,24 @@ def forecast_estadisticas_admitidos(
 
 
 def forecast_estadisticas_aspirantes(
-    filepath, model, output_dir, output_filename, periods=10
+    filepath, total_forecast, output_dir, output_filename, periods=10
 ):
     # Load and preprocess the data
     raw_data = load_data(filepath)
     processed_data = preprocess_data(raw_data)
 
+    estadisticas_columns = [
+        "Postgrado",
+        "Pregrado",
+    ]
+
+    # Ensure all columns exist in the dataset
+    existing_columns = [
+        col for col in estadisticas_columns if col in processed_data.columns
+    ]
     # Calculate proportions
     proportions = (
-        processed_data[["Postgrado", "Pregrado"]]
-        .div(processed_data["Total"], axis=0)
-        .mean()
+        processed_data[estadisticas_columns].div(processed_data["Total"], axis=0).mean()
     )
 
     # Generate future periods
@@ -462,25 +456,13 @@ def forecast_estadisticas_aspirantes(
 
     # Create a dictionary to store forecasts
     all_predictions = {
-        "Period": [],
-        "Total": [],
+        "Period": future_periods,
+        "Total": total_forecast.round().astype(int),
     }
-    for column in ["Postgrado", "Pregrado"]:
-        all_predictions[column] = []
 
-    # Forecast one period at a time
-    for period in range(periods):
-        next_forecast = model.get_forecast(steps=1).predicted_mean.iloc[0]
-        all_predictions["Period"].append(future_periods[period])
-        all_predictions["Total"].append(next_forecast)
-
-        for column in ["Postgrado", "Pregrado"]:
-            category_forecast = (
-                (next_forecast * proportions[column]).round().astype(int)
-            )
-            all_predictions[column].append(category_forecast)
-
-        model = model.append([next_forecast])
+    for column in existing_columns:
+        category_forecast = (total_forecast * proportions[column]).round().astype(int)
+        all_predictions[column] = category_forecast
 
     # Convert dictionary to DataFrame
     predictions_df = pd.DataFrame(all_predictions)
@@ -855,6 +837,7 @@ def main():
     area_filepath = "data/csv/Area del Conocimiento.csv"
     estadisticas_filepath = "data/csv/Estadisticas Matriculados.csv"
     estadisticas_admitidos_filepath = "data/csv/Estadisticas Admitidos.csv"
+    estadisticas_aspirantes_filepath = "data/csv/Estadisticas Aspirantes.csv"
     lugar_nacimiento_filepath = "data/csv/Lugar Nacimiento.csv"
     lugar_procedencia_filepath = "data/csv/Lugar Procedencia.csv"
     modalidad_filepath = "data/csv/Modalidad.csv"
@@ -882,19 +865,23 @@ def main():
         )
     )
 
-    # Train the model for the "Area" dataset
-    area_raw_data = load_data(area_filepath)
-    area_processed_data = preprocess_data(area_raw_data)
-    area_model = train_model(area_processed_data, "Total", order, seasonal_order)
+    total_forecast = matriculados_predictions["Total"]
 
     # Forecast and save for the "Area" dataset using the trained model
     area_output_dir = os.path.join(base_output_dir, "Area")
-    area_data, area_predictions, area_future_periods = forecast_area(
-        area_filepath, area_model, area_output_dir, "Area_forecasts.csv", periods
+    (
+        area_data,
+        area_predictions,
+        area_future_periods,
+    ) = forecast_area(
+        area_filepath,
+        total_forecast,
+        area_output_dir,
+        "Area_forecasts.csv",
+        periods,
     )
 
     # Forecast and save for the "Sexo" dataset using the total forecast from "Matriculados Primera Vez"
-    total_forecast = matriculados_predictions["Total"]
     sexo_output_dir = os.path.join(base_output_dir, "Sexo")
     sexo_data, sexo_predictions, sexo_future_periods = forecast_sexo(
         sexo_filepath, total_forecast, sexo_output_dir, "Sexo_forecasts.csv", periods
@@ -908,15 +895,12 @@ def main():
 
     # Forecast and save for the "Estadisticas Matriculados" dataset
     estadisticas_output_dir = os.path.join(base_output_dir, "Estadisticas_Matriculados")
-    estadisticas_model = train_model(
-        area_processed_data, "Total", order, seasonal_order
-    )
     estadisticas_data, estadisticas_predictions, estadisticas_future_periods = (
         forecast_estadisticas(
             estadisticas_filepath,
-            estadisticas_model,
+            total_forecast,
             estadisticas_output_dir,
-            "Estadisticas_forecasts.csv",
+            "Estadisticas_Matriculados_forecasts.csv",
             periods,
         )
     )
@@ -940,15 +924,15 @@ def main():
         periods,
     )
 
-    # File path for "Estadisticas Aspirantes" dataset
-    estadisticas_aspirantes_filepath = "data/csv/Estadisticas Aspirantes.csv"
+    # Forecast and save for the "Sexo" dataset using the total forecast from "Matriculados Primera Vez"
+    sexo_output_dir = os.path.join(base_output_dir, "Sexo")
+    sexo_data, sexo_predictions, sexo_future_periods = forecast_sexo(
+        sexo_filepath, total_forecast, sexo_output_dir, "Sexo_forecasts.csv", periods
+    )
 
     # Forecast and save for the "Estadisticas Aspirantes" dataset
     estadisticas_aspirantes_output_dir = os.path.join(
         base_output_dir, "Estadisticas_Aspirantes"
-    )
-    estadisticas_aspirantes_model = train_model(
-        load_data(estadisticas_aspirantes_filepath), "Total", order, seasonal_order
     )
     (
         estadisticas_aspirantes_data,
@@ -956,7 +940,7 @@ def main():
         estadisticas_aspirantes_future_periods,
     ) = forecast_estadisticas_aspirantes(
         estadisticas_aspirantes_filepath,
-        estadisticas_aspirantes_model,
+        total_forecast,
         estadisticas_aspirantes_output_dir,
         "Estadisticas_Aspirantes_forecasts.csv",
         periods,
